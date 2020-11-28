@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Styled Components</title>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      function component(strings, ...dynamicValues) {
+        return function (props) {
+          let newContent = strings.slice();
+          dynamicValues.forEach((value, index) => {
+            newContent[index] += props[value];
+          });
+          return newContent.join("");
+        };
+      }
+
+      function render(component, container) {
+        container.innerHTML = component;
+      }
+
+      function createStyledElements(htmlTags) {
+        return htmlTags.reduce(
+          (htmlElements, tag) => (
+            (htmlElements[tag] = function (styles) {
+              return function (content) {
+                return `<${tag}>${content}</${tag}>`;
+              };
+            }),
+            htmlElements
+          ),
+          {}
+        );
+      }
+
+      const props = {
+        message: "Custom styled component",
+      };
+
+      const htmlTags = ["h1", "h2", "h3", "div", "p", "small", "marquee"];
+
+      const styled = createStyledElements(htmlTags);
+
+      const TitleStyled = styled.h2`
+        color: orange;
+        font-family: system-ui;
+        font-size: 50px;
+        text-shadow: 2px 2px 0 black;
+      `;
+
+      const Title = component`<div> ${"message"} </div>`(props);
+
+      const element = document.getElementById("container");
+      render(TitleStyled(Title), element);
+    </script>
+  </body>
+</html>
