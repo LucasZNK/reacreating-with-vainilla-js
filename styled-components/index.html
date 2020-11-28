@@ -8,6 +8,7 @@
   <body>
     <div id="container"></div>
     <script>
+      // Styled components with vainilla js
       function component(strings, ...dynamicValues) {
         return function (props) {
           let newContent = strings.slice();
@@ -24,37 +25,45 @@
 
       function createStyledElements(htmlTags) {
         return htmlTags.reduce(
-          (htmlElements, tag) => (
-            (htmlElements[tag] = function (styles) {
+          (elements, tag) => (
+            (elements[tag] = function (styles) {
               return function (content) {
-                return `<${tag}>${content}</${tag}>`;
+                return `<${tag} style="${styles}">${content}</${tag}>`;
               };
             }),
-            htmlElements
+            elements
           ),
           {}
         );
       }
 
       const props = {
-        message: "Custom styled component",
+        buttonMessage: "My buttton",
       };
 
-      const htmlTags = ["h1", "h2", "h3", "div", "p", "small", "marquee"];
+      const htmlTags = ["h1", "h2", "h3", "div", "p", "small", "br", "button"];
 
       const styled = createStyledElements(htmlTags);
 
-      const TitleStyled = styled.h2`
-        color: orange;
-        font-family: system-ui;
-        font-size: 50px;
-        text-shadow: 2px 2px 0 black;
+      const ButtonStyled = styled.button`
+        border-radius: 50px;
+        background: #01bf71;
+        white-space: nowrap;
+        padding: 14px 48px;
+        color: #010606;
+        font-size: 20px;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       `;
 
-      const Title = component`<div> ${"message"} </div>`(props);
+      const Button = component`<div> ${"buttonMessage"}</div>`(props);
 
       const element = document.getElementById("container");
-      render(TitleStyled(Title), element);
+      render([ButtonStyled(Button)], element);
     </script>
   </body>
 </html>
