@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Calorie Burner</title>
+  </head>
+
+  <body>
+    <main>
+      <div class="wrapper">
+        <details>
+          <summary>⭐️ Explanation</summary>
+          <p>
+            The book, Convert Anything to Calories, concluded that, on average,
+            a person with a 10.8 cm^3 index finger and 11.7 grams will need many
+            clicks to keep the line. See require 16.7 micromoles of adenosine
+            triphosphate (the molecule that transports energy between cells) to
+            move one gram of the body for a second, and since there are 7.3
+            calories in a mole (the measure of amount of a substance) of
+            adenosine triphosphate, in theory, each mouse click should burn 1.42
+            calories. Although the calculation assumes the movement of all the
+            muscle, so the actual amount may vary a little.
+          </p>
+          <p>
+            But it happens to be Saturday and you're hungry. you get a pizza
+            (1,835kCal) with a coke (97kCal), you would make 1,360,563 clicks to
+            burn the dinner. And how is Saturday will probably involve a few
+            alcoholic drinks: in a Gin & Tonic (120kCal) there are 84,507
+            clicks, and 131,690.14 for each beer you consume. In other words,
+            with 427 clicks on average per day, the computer is not a good
+            exercise.
+          </p>
+        </details>
+        <h1>Calorie Burner</h1>
+        <p class="result" id="result"></p>
+        <button id="burn" class="burn">🔥</button>
+        <p class="result" id="objetive"></p>
+      </div>
+    </main>
+
+    <script>
+      function createStore(reducer, initialState) {
+        let state = initialState;
+        let updater = () => {};
+
+        const getState = () => state;
+
+        const dispatch = (action) => {
+          state = reducer(state, action);
+          updater();
+        };
+
+        const subscribe = (listener) => {
+          updater = listener;
+        };
+
+        return {
+          getState,
+          dispatch,
+          subscribe,
+        };
+      }
+
+      function reducer(state, action) {
+        switch (action.type) {
+          case "BURN":
+            return {
+              ...state,
+              caloriesBurned: state.caloriesBurned + 1.42,
+              caloriesObjetive: state.caloriesObjetive - 1.42,
+            };
+            break;
+          default:
+            return state;
+        }
+      }
+
+      const store = createStore(reducer, {
+        caloriesBurned: 0,
+        caloriesObjetive: 1360563,
+      });
+
+      store.subscribe(() => {
+        const { caloriesBurned, caloriesObjetive } = store.getState();
+        window.result.textContent = `Burned beam: ${caloriesBurned.toFixed(
+          2
+        )} calories`;
+        window.objetive.textContent = `You are missing 1 ${caloriesObjetive.toFixed(
+          4
+        )} to burn a pizza and a coke `;
+      });
+
+      const burn = () => {
+        store.dispatch({
+          type: "BURN",
+          payoload: 1.42,
+        });
+      };
+
+      window.burn.addEventListener("click", burn);
+    </script>
+  </body>
+</html>
